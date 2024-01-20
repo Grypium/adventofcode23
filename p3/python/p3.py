@@ -34,9 +34,10 @@ def get_neighbors(cordinate: list, max_depth: int, max_width: int):
 
 
 def get_full_number(cordinate: list, grid: list):
+
     row = cordinate[0]
     index = cordinate[1]
-    max_width = len(grid[0])
+    max_width = len(grid[0]) - 1
 
     forward_string = ""
     backward_string = ""
@@ -68,9 +69,6 @@ def get_full_number(cordinate: list, grid: list):
             backward_string = char + backward_string
             continue
         break
-    print(forward_string)
-    print(backward_string)
-    print(grid[row][index])
     return int(backward_string + grid[row][index] + forward_string)
 
 def get_symbols(grid: list):
@@ -79,7 +77,6 @@ def get_symbols(grid: list):
     for index_row, row in enumerate(grid):
         for index_column, column in enumerate(row):
             if not column.isalnum() and column != '.':
-                print(column)
                 cordinate = [index_row, index_column]
                 symbols.append(cordinate)
     
@@ -90,26 +87,25 @@ if __name__ == "__main__":
     input = get_input("/mnt/workspace/adventofcode23/p3/input.txt")
     input = [x.strip() for x in input]
 
-    max_depth = len(input)
-    max_width = len(input[0])
+    max_depth = len(input) - 1
+    max_width = len(input[0]) - 1
 
     total = 0
     
     # symbols [[0,1], [9,3]]
     symbols = get_symbols(input)
-    #for symbol in symbols:
-    #   neighbors = get_neighbors(symbol, max_depth, max_width)
-    #   
-    #   last_number = 0
-    #   for neighbor in neighbors:
-    #       if input[neighbor[0]][neighbor[1]].isdigit:
-    #           number = get_full_number(neighbor, input)
-    #           
-    #           if number == last_number:
-    #               continue
+    for symbol in symbols:
+       neighbors = get_neighbors(symbol, max_depth, max_width)
+       last_nums = []
+       for neighbor in neighbors: 
+           if input[neighbor[0]][neighbor[1]].isdigit():
+               number = get_full_number(neighbor, input)
+               if number in last_nums:
+                   continue
                 
-    #           last_number = number
-    #           total += number
+               total += number
+               last_nums.append(number)
+               
     
     print(total)
 
